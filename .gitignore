@@ -351,3 +351,7 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# Some my PDF files
+tt_my_first_fpga.pdf
+DE10-Lite_User_Manual.pdf
