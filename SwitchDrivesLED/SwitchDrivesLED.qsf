@@ -55,3 +55,11 @@ set_global_assignment -name EDA_GENERATE_FUNCTIONAL_NETLIST OFF -section_id eda_
 set_global_assignment -name EDA_GENERATE_FUNCTIONAL_NETLIST OFF -section_id eda_board_design_signal_integrity
 set_global_assignment -name EDA_GENERATE_FUNCTIONAL_NETLIST OFF -section_id eda_board_design_boundary_scan
 set_global_assignment -name VHDL_FILE src/SwitchDrivesLED.vhd
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_location_assignment PIN_A8 -to led1
+set_location_assignment PIN_B8 -to sw1
+set_instance_assignment -name IO_STANDARD "3.3 V SCHMITT TRIGGER" -to sw1
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to led1
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
