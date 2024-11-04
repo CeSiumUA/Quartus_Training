@@ -355,3 +355,5 @@ MigrationBackup/
 # Some my PDF files
 tt_my_first_fpga.pdf
 DE10-Lite_User_Manual.pdf
+
+*.rdr.flock
