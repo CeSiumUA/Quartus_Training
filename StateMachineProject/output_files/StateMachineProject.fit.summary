@@ -1,13 +1,13 @@
-Fitter Status : Successful - Tue Nov  5 07:20:16 2024
+Fitter Status : Successful - Sat Nov  9 07:59:23 2024
 Quartus Prime Version : 23.1std.1 Build 993 05/14/2024 SC Lite Edition
 Revision Name : StateMachineProject
 Top-level Entity Name : StateMachineProject
 Family : MAX 10
 Device : 10M50DAF484C7G
 Timing Models : Final
-Total logic elements : 10 / 49,760 ( < 1 % )
-    Total combinational functions : 8 / 49,760 ( < 1 % )
-    Dedicated logic registers : 6 / 49,760 ( < 1 % )
+Total logic elements : 9 / 49,760 ( < 1 % )
+    Total combinational functions : 7 / 49,760 ( < 1 % )
+    Dedicated logic registers : 5 / 49,760 ( < 1 % )
 Total registers : 6
 Total pins : 8 / 360 ( 2 % )
 Total virtual pins : 0

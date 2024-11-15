@@ -17,7 +17,7 @@
 // PROGRAM "Quartus Prime"
 // VERSION "Version 23.1std.1 Build 993 05/14/2024 SC Lite Edition"
 
-// DATE "11/05/2024 07:20:22"
+// DATE "11/09/2024 07:59:29"
 
 // 
 // Device: Altera 10M50DAF484C7G Package FBGA484
@@ -83,6 +83,7 @@ wire \~QUARTUS_CREATED_ADC2~~eoc ;
 wire \~ALTERA_TDO~~obuf_o ;
 wire \rst~input_o ;
 wire \clk~input_o ;
+wire \clk~inputclkctrl_outclk ;
 wire \PLL1|altpll_component|auto_generated|wire_pll1_fbout ;
 wire \PLL1|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl_outclk ;
 wire \sw[2]~input_o ;
@@ -97,7 +98,6 @@ wire \StateVariable.STATE2~q ;
 wire \Selector0~2_combout ;
 wire \StateVariable.STATE1~2_combout ;
 wire \StateVariable.STATE1~q ;
-wire \led[1]~0_combout ;
 wire \led[1]~reg0_q ;
 wire \led[2]~reg0feeder_combout ;
 wire \led[2]~reg0_q ;
@@ -193,6 +193,19 @@ defparam \clk~input .listen_to_nsleep_signal = "false";
 defparam \clk~input .simulate_z_as = "z";
 // synopsys translate_on
 
+// Location: CLKCTRL_G19
+fiftyfivenm_clkctrl \clk~inputclkctrl (
+	.ena(vcc),
+	.inclk({vcc,vcc,vcc,\clk~input_o }),
+	.clkselect(2'b00),
+	.devclrn(devclrn),
+	.devpor(devpor),
+	.outclk(\clk~inputclkctrl_outclk ));
+// synopsys translate_off
+defparam \clk~inputclkctrl .clock_type = "global clock";
+defparam \clk~inputclkctrl .ena_register_mode = "none";
+// synopsys translate_on
+
 // Location: PLL_1
 fiftyfivenm_pll \PLL1|altpll_component|auto_generated|pll1 (
 	.areset(!\rst~input_o ),
@@ -205,7 +218,7 @@ fiftyfivenm_pll \PLL1|altpll_component|auto_generated|pll1 (
 	.scanclkena(vcc),
 	.configupdate(gnd),
 	.clkswitch(gnd),
-	.inclk({gnd,\clk~input_o }),
+	.inclk({gnd,\clk~inputclkctrl_outclk }),
 	.phasecounterselect(3'b000),
 	.phasedone(),
 	.scandataout(),
@@ -337,20 +350,20 @@ defparam \sw[1]~input .listen_to_nsleep_signal = "false";
 defparam \sw[1]~input .simulate_z_as = "z";
 // synopsys translate_on
 
-// Location: LCCOMB_X51_Y53_N22
+// Location: LCCOMB_X51_Y53_N12
 fiftyfivenm_lcell_comb \Selector0~1 (
 // Equation(s):
 // \Selector0~1_combout  = (\StateVariable.STATE1~q ) # (\sw[1]~input_o )
 
-	.dataa(\StateVariable.STATE1~q ),
-	.datab(gnd),
+	.dataa(gnd),
+	.datab(\StateVariable.STATE1~q ),
 	.datac(gnd),
 	.datad(\sw[1]~input_o ),
 	.cin(gnd),
 	.combout(\Selector0~1_combout ),
 	.cout());
 // synopsys translate_off
-defparam \Selector0~1 .lut_mask = 16'hFFAA;
+defparam \Selector0~1 .lut_mask = 16'hFFCC;
 defparam \Selector0~1 .sum_lutc_input = "datac";
 // synopsys translate_on
 
@@ -366,24 +379,24 @@ defparam \sw[3]~input .listen_to_nsleep_signal = "false";
 defparam \sw[3]~input .simulate_z_as = "z";
 // synopsys translate_on
 
-// Location: LCCOMB_X51_Y53_N10
+// Location: LCCOMB_X51_Y53_N24
 fiftyfivenm_lcell_comb \Selector2~2 (
 // Equation(s):
-// \Selector2~2_combout  = (\Selector0~1_combout  & (((\sw[3]~input_o  & \StateVariable.STATE3~q )) # (!\Selector0~2_combout ))) # (!\Selector0~1_combout  & (\StateVariable.STATE3~q  & (\sw[3]~input_o  $ (\Selector0~2_combout ))))
+// \Selector2~2_combout  = (\Selector0~2_combout  & (\StateVariable.STATE3~q  & (\sw[3]~input_o  $ (!\Selector0~1_combout )))) # (!\Selector0~2_combout  & ((\Selector0~1_combout ) # ((\sw[3]~input_o  & \StateVariable.STATE3~q ))))
 
-	.dataa(\Selector0~1_combout ),
+	.dataa(\Selector0~2_combout ),
 	.datab(\sw[3]~input_o ),
 	.datac(\StateVariable.STATE3~q ),
-	.datad(\Selector0~2_combout ),
+	.datad(\Selector0~1_combout ),
 	.cin(gnd),
 	.combout(\Selector2~2_combout ),
 	.cout());
 // synopsys translate_off
-defparam \Selector2~2 .lut_mask = 16'h90EA;
+defparam \Selector2~2 .lut_mask = 16'hD560;
 defparam \Selector2~2 .sum_lutc_input = "datac";
 // synopsys translate_on
 
-// Location: FF_X51_Y53_N11
+// Location: FF_X51_Y53_N25
 dffeas \StateVariable.STATE3 (
 	.clk(\PLL1|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl_outclk ),
 	.d(\Selector2~2_combout ),
@@ -402,41 +415,41 @@ defparam \StateVariable.STATE3 .is_wysiwyg = "true";
 defparam \StateVariable.STATE3 .power_up = "low";
 // synopsys translate_on
 
-// Location: LCCOMB_X51_Y53_N4
+// Location: LCCOMB_X51_Y53_N10
 fiftyfivenm_lcell_comb \Selector0~0 (
 // Equation(s):
 // \Selector0~0_combout  = (\sw[3]~input_o ) # (!\StateVariable.STATE3~q )
 
-	.dataa(\StateVariable.STATE3~q ),
-	.datab(gnd),
+	.dataa(gnd),
+	.datab(\StateVariable.STATE3~q ),
 	.datac(\sw[3]~input_o ),
 	.datad(gnd),
 	.cin(gnd),
 	.combout(\Selector0~0_combout ),
 	.cout());
 // synopsys translate_off
-defparam \Selector0~0 .lut_mask = 16'hF5F5;
+defparam \Selector0~0 .lut_mask = 16'hF3F3;
 defparam \Selector0~0 .sum_lutc_input = "datac";
 // synopsys translate_on
 
-// Location: LCCOMB_X51_Y53_N0
+// Location: LCCOMB_X51_Y53_N6
 fiftyfivenm_lcell_comb \Selector1~2 (
 // Equation(s):
-// \Selector1~2_combout  = (\Selector0~0_combout  & (((\sw[2]~input_o  & \StateVariable.STATE2~q )) # (!\Selector0~1_combout ))) # (!\Selector0~0_combout  & (\StateVariable.STATE2~q  & (\sw[2]~input_o  $ (\Selector0~1_combout ))))
+// \Selector1~2_combout  = (\Selector0~1_combout  & (\StateVariable.STATE2~q  & (\sw[2]~input_o  $ (!\Selector0~0_combout )))) # (!\Selector0~1_combout  & ((\Selector0~0_combout ) # ((\sw[2]~input_o  & \StateVariable.STATE2~q ))))
 
 	.dataa(\sw[2]~input_o ),
-	.datab(\Selector0~0_combout ),
+	.datab(\Selector0~1_combout ),
 	.datac(\StateVariable.STATE2~q ),
-	.datad(\Selector0~1_combout ),
+	.datad(\Selector0~0_combout ),
 	.cin(gnd),
 	.combout(\Selector1~2_combout ),
 	.cout());
 // synopsys translate_off
-defparam \Selector1~2 .lut_mask = 16'h90EC;
+defparam \Selector1~2 .lut_mask = 16'hB360;
 defparam \Selector1~2 .sum_lutc_input = "datac";
 // synopsys translate_on
 
-// Location: FF_X51_Y53_N1
+// Location: FF_X51_Y53_N7
 dffeas \StateVariable.STATE2 (
 	.clk(\PLL1|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl_outclk ),
 	.d(\Selector1~2_combout ),
@@ -455,41 +468,41 @@ defparam \StateVariable.STATE2 .is_wysiwyg = "true";
 defparam \StateVariable.STATE2 .power_up = "low";
 // synopsys translate_on
 
-// Location: LCCOMB_X51_Y53_N16
+// Location: LCCOMB_X51_Y53_N30
 fiftyfivenm_lcell_comb \Selector0~2 (
 // Equation(s):
 // \Selector0~2_combout  = (\sw[2]~input_o ) # (!\StateVariable.STATE2~q )
 
-	.dataa(gnd),
+	.dataa(\StateVariable.STATE2~q ),
 	.datab(gnd),
 	.datac(\sw[2]~input_o ),
-	.datad(\StateVariable.STATE2~q ),
+	.datad(gnd),
 	.cin(gnd),
 	.combout(\Selector0~2_combout ),
 	.cout());
 // synopsys translate_off
-defparam \Selector0~2 .lut_mask = 16'hF0FF;
+defparam \Selector0~2 .lut_mask = 16'hF5F5;
 defparam \Selector0~2 .sum_lutc_input = "datac";
 // synopsys translate_on
 
-// Location: LCCOMB_X51_Y53_N6
+// Location: LCCOMB_X51_Y53_N28
 fiftyfivenm_lcell_comb \StateVariable.STATE1~2 (
 // Equation(s):
-// \StateVariable.STATE1~2_combout  = (\Selector0~0_combout  & ((\StateVariable.STATE1~q ) # (\Selector0~2_combout  $ (\sw[1]~input_o )))) # (!\Selector0~0_combout  & (!\Selector0~2_combout  & (\StateVariable.STATE1~q )))
+// \StateVariable.STATE1~2_combout  = (\StateVariable.STATE1~q  & (((\Selector0~0_combout )) # (!\Selector0~2_combout ))) # (!\StateVariable.STATE1~q  & (\Selector0~0_combout  & (\Selector0~2_combout  $ (\sw[1]~input_o ))))
 
 	.dataa(\Selector0~2_combout ),
-	.datab(\Selector0~0_combout ),
+	.datab(\sw[1]~input_o ),
 	.datac(\StateVariable.STATE1~q ),
-	.datad(\sw[1]~input_o ),
+	.datad(\Selector0~0_combout ),
 	.cin(gnd),
 	.combout(\StateVariable.STATE1~2_combout ),
 	.cout());
 // synopsys translate_off
-defparam \StateVariable.STATE1~2 .lut_mask = 16'hD4D8;
+defparam \StateVariable.STATE1~2 .lut_mask = 16'hF650;
 defparam \StateVariable.STATE1~2 .sum_lutc_input = "datac";
 // synopsys translate_on
 
-// Location: FF_X51_Y53_N7
+// Location: FF_X51_Y53_N29
 dffeas \StateVariable.STATE1 (
 	.clk(\PLL1|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl_outclk ),
 	.d(\StateVariable.STATE1~2_combout ),
@@ -508,27 +521,10 @@ defparam \StateVariable.STATE1 .is_wysiwyg = "true";
 defparam \StateVariable.STATE1 .power_up = "low";
 // synopsys translate_on
 
-// Location: LCCOMB_X51_Y53_N24
-fiftyfivenm_lcell_comb \led[1]~0 (
-// Equation(s):
-// \led[1]~0_combout  = !\StateVariable.STATE1~q 
-
-	.dataa(gnd),
-	.datab(gnd),
-	.datac(gnd),
-	.datad(\StateVariable.STATE1~q ),
-	.cin(gnd),
-	.combout(\led[1]~0_combout ),
-	.cout());
-// synopsys translate_off
-defparam \led[1]~0 .lut_mask = 16'h00FF;
-defparam \led[1]~0 .sum_lutc_input = "datac";
-// synopsys translate_on
-
-// Location: FF_X51_Y53_N25
+// Location: DDIOOUTCELL_X46_Y54_N4
 dffeas \led[1]~reg0 (
 	.clk(\PLL1|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl_outclk ),
-	.d(\led[1]~0_combout ),
+	.d(!\StateVariable.STATE1~q ),
 	.asdata(vcc),
 	.clrn(\rst~input_o ),
 	.aload(gnd),
@@ -544,7 +540,7 @@ defparam \led[1]~reg0 .is_wysiwyg = "true";
 defparam \led[1]~reg0 .power_up = "low";
 // synopsys translate_on
 
-// Location: LCCOMB_X51_Y53_N18
+// Location: LCCOMB_X51_Y53_N0
 fiftyfivenm_lcell_comb \led[2]~reg0feeder (
 // Equation(s):
 // \led[2]~reg0feeder_combout  = \StateVariable.STATE2~q 
@@ -561,7 +557,7 @@ defparam \led[2]~reg0feeder .lut_mask = 16'hFF00;
 defparam \led[2]~reg0feeder .sum_lutc_input = "datac";
 // synopsys translate_on
 
-// Location: FF_X51_Y53_N19
+// Location: FF_X51_Y53_N1
 dffeas \led[2]~reg0 (
 	.clk(\PLL1|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl_outclk ),
 	.d(\led[2]~reg0feeder_combout ),
@@ -580,7 +576,7 @@ defparam \led[2]~reg0 .is_wysiwyg = "true";
 defparam \led[2]~reg0 .power_up = "low";
 // synopsys translate_on
 
-// Location: LCCOMB_X51_Y53_N28
+// Location: LCCOMB_X51_Y53_N26
 fiftyfivenm_lcell_comb \led[3]~reg0feeder (
 // Equation(s):
 // \led[3]~reg0feeder_combout  = \StateVariable.STATE3~q 
@@ -597,7 +593,7 @@ defparam \led[3]~reg0feeder .lut_mask = 16'hFF00;
 defparam \led[3]~reg0feeder .sum_lutc_input = "datac";
 // synopsys translate_on
 
-// Location: FF_X51_Y53_N29
+// Location: FF_X51_Y53_N27
 dffeas \led[3]~reg0 (
 	.clk(\PLL1|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl_outclk ),
 	.d(\led[3]~reg0feeder_combout ),

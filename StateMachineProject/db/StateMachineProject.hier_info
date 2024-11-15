@@ -14,9 +14,9 @@ sw[2] => StateVariable.OUTPUTSELECT
 sw[3] => StateVariable.OUTPUTSELECT
 sw[3] => StateVariable.OUTPUTSELECT
 sw[3] => StateVariable.OUTPUTSELECT
-led[1] <= led[1]~reg0.DB_MAX_OUTPUT_PORT_TYPE
-led[2] <= led[2]~reg0.DB_MAX_OUTPUT_PORT_TYPE
-led[3] <= led[3]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+led[1] << led[1]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+led[2] << led[2]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+led[3] << led[3]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |StateMachineProject|PLL:PLL1
